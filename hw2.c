@@ -1,12 +1,18 @@
+
 /***********************************************************************************************
+
  CSci 4061 Fall 2017
  Assignment# 2:   I/O Programming on UNIX/LINUX
+
  Student name: Michael Nordby, Logan Stucker
- Student ID: 5159186, 4969657
+ Student ID:   5159186 4969657
  X500 id: nordb132, stuck124
+
  Operating system on which you tested your code: Linux, Unix, MacOS
  CSELABS machine: <machine you tested on eg: xyz.cselabs.umn.edu>
+
  GROUP INSTRUCTION:  Please make only ONLY one  submission when working in a group.
+
 ***********************************************************************************************/
 
 
@@ -22,6 +28,13 @@
 
 int main(int argc, char *argv[])
 {
+	char *dirname;
+
+    DIR *dp; 
+    struct dirent *direntry;
+    dirname = (char*)malloc(NAMESIZE*sizeof(char));
+    int totalsum = 0;
+	
 	int choice = -1;
 	char *input_dir_name, *dirpath, *chptr;
 	struct stat statbuf;
@@ -30,6 +43,8 @@ int main(int argc, char *argv[])
 	mode_t  perms =  0740;
 	char confirm[4];
 	char pathname[1024];
+	
+
 	
 	struct namensize{
     char path[NAMESIZE];
@@ -51,14 +66,6 @@ int main(int argc, char *argv[])
 	printf("Enter a directory name in the current directory: ");
 	scanf("%s", input_dir_name);
 	
-	DIR *dr = opendir(input_dir_name);
-	
-	if (dr == NULL) {
-		printf("not a directory");
-		return 0;
-	}
-	
-	struct dirent *de;
 	
 	/**********************************************************/
 	/*Form a full path to the directory and check if it exists*/
@@ -67,36 +74,32 @@ int main(int argc, char *argv[])
 
 	if(choice == 1){
 		printf("\nEXECUTING \"1. Find the 3 largest files in a directory\"\n");
-			chdir (dr);
-			struct namensize largest[2];
-			while ((de = readdir(dr)) != NULL){
-				printf("The size of file %s is :%d bytes\n",direntry->d_name,(int) statbuf.st_size);
-				print(statbuf.st_size);
-			
-				if (current_file_size > largest[0].size)	
-				{	
-					largest[2] = largest[1];
-					largest[1] = largest[0];
-					largest[0].name = current_file_name;
-					largest[0].size = current_file_size;
-				}
-				else if (current_file_size > largest[1].size)
-				{
-					largest[2] = largest[1];
-					largest[1].name = current_file_name;
-					largest[1].size = current_file_size;
-				}
-				else if current_file_size > largest[2].size)	
-				{
-					largest[2].name = current_file_name;
-					largest[2].size = current_file_size;
-				}	
-			
-			}
-				
-				
-			closedir(dr);
-			return 0;
+	
+	    /* Check if the directory entered exists or not*/
+    stat(input_dir_name,&statbuf);
+    if(!(S_ISDIR(statbuf.st_mode))){
+        printf("The directory name is not valid. Directory does not exist\n");
+        exit(0);
+    }
+
+    if((dp=opendir(input_dir_name))==NULL){
+        perror("Error while opening the directory");
+        exit(0);
+    }
+    /* Loop through the directory structure */
+    chdir(input_dir_name); //previously missing
+    while( (direntry = readdir(dp)) != NULL )
+    {
+	stat(direntry->d_name,&statbuf);
+	if(!(S_ISDIR(statbuf.st_mode)))
+	{
+	    printf("The size of file %s is :%d bytes\n",direntry->d_name,(int) statbuf.st_size);
+	    totalsum += (int) statbuf.st_size;
+	}
+    }
+
+    printf("The total size of the files in %s is : %d bytes\n",dirname,totalsum);
+	
 	}
 
 	else if(choice == 2){
