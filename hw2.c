@@ -1,17 +1,12 @@
 /***********************************************************************************************
-
  CSci 4061 Fall 2017
  Assignment# 2:   I/O Programming on UNIX/LINUX
-
  Student name: Michael Nordby, Logan Stucker
  Student ID: 5159186, 4969657
  X500 id: nordb132, stuck124
-
  Operating system on which you tested your code: Linux, Unix, MacOS
  CSELABS machine: <machine you tested on eg: xyz.cselabs.umn.edu>
-
  GROUP INSTRUCTION:  Please make only ONLY one  submission when working in a group.
-
 ***********************************************************************************************/
 
 
