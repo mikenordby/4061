@@ -167,30 +167,25 @@ int main(int argc, char *argv[])
 }
 
 void recsearch (char * path) {
-	
-	 DIR * dpp = opendir(path); // open the path
-  if(dpp==NULL) return; // if was not able return
-  struct dirent * dir; // for the directory entries
-	
-	while ((dir = readdir(dpp)) != NULL) {
-		
-		 if(dir-> d_type != DT_DIR) {
-			 
+	DIR * dpp = opendir(path); // open the path
+	if(dpp==NULL) return; // if was not able return
+	struct dirent * dir; // for the directory entries
+
+	while ((dir = readdir(dpp)) != NULL) 
+	{
+		if(dir-> d_type != DT_DIR) { 
 			printf("Reg: %s\n",dir->d_name);
-		
 		}
-		 else
-      if(dir -> d_type == DT_DIR && strcmp(dir->d_name,".")!=0 && strcmp(dir->d_name,"..")!=0 ) // if it is a directory
-      {
-        printf("Dir: %s\n",dir->d_name); // print its name in green
-        char d_path[255]; // here I am using sprintf which is safer than strcat
-        sprintf(d_path, "%s/%s", path, dir->d_name);
-        recsearch(d_path); // recall with the new path
-      }
-    }
-    closedir(dpp); // finally close the directory
-	
+		else if(dir -> d_type == DT_DIR && strcmp(dir->d_name,".")!=0 && strcmp(dir->d_name,"..")!=0 ) // if it is a directory
+		{
+			printf("Dir: %s\n",dir->d_name); // print its name in green
+			char d_path[255]; // here I am using sprintf which is safer than strcat
+			sprintf(d_path, "%s/%s", path, dir->d_name);
+			recsearch(d_path); // recall with the new path
+		}
 	}
+	closedir(dpp); // finally close the directory
+}
 	
 
 
